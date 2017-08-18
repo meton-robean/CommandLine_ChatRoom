@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script language="javascript">
+    var ws = null;
+
+    ws = new WebSocket('ws://192.168.186.130:8000/cgi-bin/TextChat');
+
+    ws.onclose = function(e) {
+        console.log('ws close');
+    }
+
+    ws.onmessage = function(e) {
+        if (typeof(e.data) == 'string') {
+            document.getElementById("txtarea").value += '\r\n' + 'There:' + e.data;
+        }
+    }
+
+    ws.onopen = function(e) {
+        console.log('ws open');
+    }
+
+    function Send() {
+        if (null != ws) {
+            var txt = document.getElementById("text").value;
+            ws.send(txt);
+            document.getElementById("txtarea").value += '\r\n' + 'I:' + txt;
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <input value="Hello" id="text" />
+    <button value="Send" onclick="Send()">Talk</button>
+    <br>
+    <textarea rows="15" cols="100">
+**********************************************
+当前用户为：aaa  端口号：8000
+操作提示：
+*   format          description
+*   >信息             与所有在线用户聊天
+*   :用户名>信息         选择用户聊天
+*   --online            显示在线用户
+*   --help              显示帮助信息
+*   exit                退出
+*   #kick:user          用户下线
+*   #shutup:user            禁止用户发言，5分钟后可自行解除禁止
+*   #advanded:user          提升用户为管理员
+*   #normal:user            降级管理员为普通用户
+***********************************************
+    </textarea>
+    <textarea id="txtarea" rows="15" cols="100"> </textarea>
+</body>
+</html>

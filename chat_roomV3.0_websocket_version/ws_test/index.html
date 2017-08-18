@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script language="javascript">
+    var ws = null;
+
+    ws = new WebSocket('ws://127.0.0.1:8000/cgi-bin/TextChat');
+
+    ws.onclose = function(e) {
+        console.log('ws close');
+    }
+
+    ws.onmessage = function(e) {
+        if (typeof(e.data) == 'string') {
+            document.getElementById("txtarea").value += '\r\n' + 'There:' + e.data;
+        }
+    }
+
+    ws.onopen = function(e) {
+        console.log('ws open');
+    }
+
+    function Send() {
+        if (null != ws) {
+            var txt = document.getElementById("text").value;
+            ws.send(txt);
+            document.getElementById("txtarea").value += '\r\n' + 'I:' + txt;
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <input value="Hello" id="text" />
+    <button value="Send" onclick="Send()">Talk</button>
+    <br>
+    <textarea id="txtarea"></textarea>
+</body>
+</html>
